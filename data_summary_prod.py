@@ -25,8 +25,8 @@ warnings.filterwarnings("ignore", message="HoverTool are being repeated")
 # import master data
 
 #master = pickle.load(open("df_output_for_donut_1022.pkl", "rb"))
-master = pd.read_pickle('df_output_for_donut_1222.pkl')
-usage_date = 'Dec 2022'
+master = pd.read_pickle('df_output_for_donut_0623.pkl')
+usage_date = 'June 2023'
 
 ##################
 # set global defaults
@@ -487,7 +487,7 @@ TOOLTIPS_3 = """
         </div>
         <br style="margin-bottom:15px;"/>
         <div>
-            <span style="font-size: 14px; font_weight: bold ">Usage stats (Dec 2022):</span>
+            <span style="font-size: 14px; font_weight: bold ">Usage stats (June 2023):</span>
         </div>
         <div>
             <span style="font-size: 12px;">Usage percentile (FTV per 1,000 items, in type) : @usage_perc</span>
@@ -542,7 +542,7 @@ def plot_chart():
         radii = set_default_rads(show_usage=False)
 
     # CREATE FIGURE
-    p = figure(plot_width=width, plot_height=height, title="findmypast Datasets (at end Dec 2022)",
+    p = figure(plot_width=width, plot_height=height, title="findmypast Datasets (at end June 2023)",
                x_axis_type=None, y_axis_type=None,
                x_range=(-420, 420), y_range=(-420, 420),
                min_border=0, outline_line_color=None,
