@@ -1,6 +1,6 @@
 ########################
 # To run locally, execute  `bokeh serve --show data_summary_xxx.py`  (old, prod, dev)
-# To run on server, execute `bokeh serve data_summary_prod.py --port 5100  --allow-websocket-origin=fh1-donut01.dun.fh:5100`
+# To run on server, execute `bokeh serve data_summary_prod.py --port 5100  --allow-websocket-origin=fh1-donut02.dun.fh:5100`
 #########################
 
 # import numpy as np   # not used
