@@ -25,8 +25,8 @@ warnings.filterwarnings("ignore", message="HoverTool are being repeated")
 # import master data
 
 #master = pickle.load(open("df_output_for_donut_1022.pkl", "rb"))
-master = pd.read_pickle('df_output_for_donut_0623.pkl')
-usage_date = 'June 2023'
+master = pd.read_pickle('df_output_for_donut_0924.pkl')
+usage_date = 'Sept 2024'
 
 ##################
 # set global defaults
@@ -48,12 +48,12 @@ rec_alphas = [0.9, 0.6]
 color_map = {i: j for i, j in zip(base_colors, [col for i, col in enumerate(palette.Category20b[20]) if i % 2 == 1])}  # maps alternate colors to 'next step' color
 
 # country quick selec t dropdown combinations
-country_dd = {'ALL':[i for i in range(18)],
-              'UK':[7,9,13,14,15,17],                               #[6,8,12,13,14,16],
-              'UK & Ireland':[7,9,10,13,14,15,17],                #[6,8,9,12,13,14,16],
-              'Ireland':[10],                                        #[9],
-              'Americas':[0,4,12,16],                                      #[0,3,11,15],
-              'Australia & NZ':[2,3,11],
+country_dd = {'ALL':[i for i in range(21)],
+              'UK':[7,9,15,16,17,18,20],                               #[6,8,12,13,14,16],
+              'UK & Ireland':[7,9,11,15,16,17,18,20],                #[6,8,9,12,13,14,16],
+              'Ireland':[11],                                        #[9],
+              'Americas':[0,4,6,14,19],                                      #[0,3,11,15],
+              'Australia & NZ':[2,3,12],
               'Asia':[1]
               }
 
@@ -82,7 +82,7 @@ def set_default_rads(show_usage=False):
         radii['radius_2'] = 200
         radii['radius_3'] = 350
         radii['hint_inc'] = 10
-        radii['excl_inc'] = 8
+        radii['excl_inc'] = 0 #8  stop indicating exclusivity
         radii['line_inc_outer'] = 20
     return radii
 
@@ -338,7 +338,7 @@ def format_cat_and_master(df):
     df['recordtype'] = df['recordtype'].str.title()
 
     # add usage radius and color data to master df
-    df = add_usage_rad_col(df)
+    #df = add_usage_rad_col(df) # remove for no usage version
 
     country_list = [x.title().replace('Uk', 'UK')
                     for x in list(set(master['source_country_list'].str.split(', ').sum()))]
@@ -372,9 +372,11 @@ recordtype = CheckboxGroup(labels=['Records', 'Documents', 'Articles', 'Images']
 hintable = RadioButtonGroup(labels=["Hintable", "Not hintable", "All"], active=2)
 hint_tip = Paragraph(text='Wedges extruded to outer circle (line) are hintable',
                      style={'font-size': '80%', 'color': 'grey'})
-exclusive = RadioButtonGroup(labels=["Exclusive", "Not exclusive", "All"], active=2)
-excl_tip = Paragraph(text='Wedges separated from inner segments are exclusive',
-                     style={'font-size': '80%', 'color': 'grey'})
+
+#exclusive = RadioButtonGroup(labels=["Exclusive", "Not exclusive", "All"], active=2)
+exxclusive = 2 # to deal with removal of exclusivity selector
+#excl_tip = Paragraph(text='Wedges separated from inner segments are exclusive',
+#                     style={'font-size': '80%', 'color': 'grey'})
 
 country = CheckboxGroup(labels=country_list, active=[x for x in range(len(country_list))])
 country_title = Paragraph(text='Source Country contains:')
@@ -382,7 +384,8 @@ country_title = Paragraph(text='Source Country contains:')
 cat_select = Select(title="ALL or Single Category view:", value="ALL", options=cat_select_menu)
 country_dropdown = Select(title="Country quick selection:", value = "ALL", options=list(country_dd.keys()))
 
-usage_toggle = Toggle(label='SHOW usage', button_type='primary', active=False)
+#usage_toggle = Toggle(label='SHOW usage', button_type='primary', active=False)
+usage_toggle = False # to remove usage toggle
 
 # widget descriptor text outputs # disabled when countries added - no space left....
 output_1 = Paragraph()
@@ -398,11 +401,12 @@ describe_text = [output_1, output_2, output_3, output_4, output_5, output_6]
 
 # creates widgets & output column
 controls_chg = [cat_min, cat_max,  recordset_min, recordset_max]
-controls_click = [recordtype, hintable, hint_tip, exclusive, excl_tip]
+controls_click = [recordtype, hintable, hint_tip]#, exclusive, excl_tip]
 controls_click_2 = [Paragraph(), country_dropdown, Paragraph(), country_title, country]  # blank Paragraph is blank line
 
 # NOTE - adding describe_text puts in 'live' counts on inputs for inputs (LH) column
-controls = [Paragraph(), cat_select, Paragraph(), usage_toggle, output_status, button]+controls_chg+controls_click  # + describe_text # blank Paragraph is blank line
+controls = ([Paragraph(), cat_select, Paragraph(), #usage_toggle,  # removing usage toggle
+            output_status, button]+controls_chg+controls_click)  # + describe_text # blank Paragraph is blank line
 
 inputs = column(controls, width=300, height=height)
 inputs_2 = column(controls_click_2, width=300, height=height)
@@ -534,15 +538,17 @@ url = "https://search.findmypast.co.uk/search-world-Records/@dataset_url"
 
 
 def plot_chart():
-    if usage_toggle.active == True:
-        usage_toggle.label = 'HIDE usage'
-        radii = set_default_rads(show_usage=True)
-    elif usage_toggle.active == False:
-        usage_toggle.label = 'SHOW usage'
-        radii = set_default_rads(show_usage=False)
+    # removed below to manage without any usage data
+    #if usage_toggle.active == True:
+    #    usage_toggle.label = 'HIDE usage'
+    #    radii = set_default_rads(show_usage=True)
+    #elif usage_toggle.active == False:
+    #    usage_toggle.label = 'SHOW usage'
+    #    radii = set_default_rads(show_usage=False)
+    radii = set_default_rads(show_usage=False)
 
     # CREATE FIGURE
-    p = figure(plot_width=width, plot_height=height, title="findmypast Datasets (at end June 2023)",
+    p = figure(plot_width=width, plot_height=height, title="findmypast Datasets (at end Sept 2024)",
                x_axis_type=None, y_axis_type=None,
                x_range=(-420, 420), y_range=(-420, 420),
                min_border=0, outline_line_color=None,
@@ -555,9 +561,14 @@ def plot_chart():
     # collect df from Master df as defined by widget settings
     used_data = select_data(cat_min.value*1000000, cat_max.value*1000000,
                             recordset_min.value*1000000, recordset_max.value*1000000,
-                            country.active, hintable.active, exclusive.active,
-                            recordtype.active, cat_select.value
+                            country.active, hintable=hintable.active, #exclusive=exclusive.active,
+                            recordtype = recordtype.active, cat_select = cat_select.value
                            )
+
+
+
+#def select_data(cat_min, cat_max, rec_min, rec_max, country, hintable=2, exclusive=2,
+#                recordtype=[0, 1, 2, 3], cat_select='ALL'):
 
     # in case selections result in a ZERO df
     if used_data.shape[0] == 0:
@@ -643,22 +654,22 @@ def plot_chart():
                     cat_df['start'], cat_df['start'], color="grey")
 
     # usage grid & bars
-    if usage_toggle.active == True:
-        p.circle(0,0, radius=ug_cent, fill_alpha=0, line_color='grey', line_alpha=0.9)
-        p.circle(0,0, radius=ug_cent+ug_half, fill_alpha=0, line_color='grey', line_alpha=0.4)
-        p.circle(0,0, radius=ug_cent-ug_half, fill_alpha=0, line_color='grey', line_alpha=0.4)
-        p.circle(0,0, radius=ug_cent-(ug_half/2), fill_alpha=0, line_color='grey', line_alpha=0.2)
-        p.circle(0,0, radius=ug_cent+(ug_half/2), fill_alpha=0, line_color='grey', line_alpha=0.2)
+    #if usage_toggle.active == True:
+    #    p.circle(0,0, radius=ug_cent, fill_alpha=0, line_color='grey', line_alpha=0.9)
+    #    p.circle(0,0, radius=ug_cent+ug_half, fill_alpha=0, line_color='grey', line_alpha=0.4)
+    #    p.circle(0,0, radius=ug_cent-ug_half, fill_alpha=0, line_color='grey', line_alpha=0.4)
+    #    p.circle(0,0, radius=ug_cent-(ug_half/2), fill_alpha=0, line_color='grey', line_alpha=0.2)
+    #    p.circle(0,0, radius=ug_cent+(ug_half/2), fill_alpha=0, line_color='grey', line_alpha=0.2)
 
-        p.annular_wedge(0, 0, ug_cent-ug_half-ug_over, ug_cent+ug_half+ug_over,
-                        cat_df['start'], cat_df['start'], color="grey")
+    #    p.annular_wedge(0, 0, ug_cent-ug_half-ug_over, ug_cent+ug_half+ug_over,
+    #                    cat_df['start'], cat_df['start'], color="grey")
 
-        for category in cat_df.index:
-            records_source = rec_df_dict[category]
-            recordset = p.annular_wedge('centre_x', 'centre_y', ug_cent-ug_half, 'usage_rad', 'start', 'end', color='usage_col',
-                                        alpha=0.7, direction='clock', source=records_source,
-                                        name='usage', line_width=0.5)
-            taptool.renderers.append(recordset)  # add recordset renderer to renderer list for taptool
+    #    for category in cat_df.index:
+    #        records_source = rec_df_dict[category]
+    #        recordset = p.annular_wedge('centre_x', 'centre_y', ug_cent-ug_half, 'usage_rad', 'start', 'end', color='usage_col',
+    #                                    alpha=0.7, direction='clock', source=records_source,
+    #                                    name='usage', line_width=0.5)
+    #        taptool.renderers.append(recordset)  # add recordset renderer to renderer list for taptool
             # can be used to draw a central line for totv usage percentile
             #p.annular_wedge(0, 0, ug_cent-ug_half, 'usage_rad_totv', 'mid', 'mid', color="grey",
              #                 alpha=0.7, direction='clock', source=records_source, name='usage_mid', line_width=0.2)
@@ -727,7 +738,7 @@ cat_max.on_change('value', callback)
 recordset_min.on_change('value', callback)
 recordset_max.on_change('value', callback)
 hintable.on_change('active', callback)
-exclusive.on_change('active', callback)
+#exclusive.on_change('active', callback)
 recordtype.on_change('active', callback)
 country.on_change('active', callback)
 
@@ -737,7 +748,7 @@ country_dropdown.on_change('value', callback_4)
 
 # update button click detector
 button.on_click(callback_2)
-usage_toggle.on_click(callback_5)
+#usage_toggle.on_click(callback_5)
 
 p = plot_chart()
 r = row([inputs_2, inputs, p])
