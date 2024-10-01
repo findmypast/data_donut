@@ -8,7 +8,7 @@ df_output_for_donut_MMYY.pkl
 (previous months are in data_archive)
 
 df_output_for_donut files are prepared each month using Jupyter notebook on Jupyter Hub:    
-http://fh1-pdp01.dun.fh:8000/user-redirect/lab/tree/shared/cbrake/dataset_summary/dataset_summary.ipynb
+http://fh1-jupyter01.dun.fh:8000/user-redirect/lab/tree/shared/cbrake/dataset_summary/dataset_summary.ipynb
 
 
 ### To run on donut server
