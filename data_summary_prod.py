@@ -365,9 +365,9 @@ warnings.filterwarnings("ignore", message="HoverTool are being repeated")
 button = Button(label="UPDATE CHART", button_type="success")
 output_status = Paragraph()
 cat_min = Slider(start=0, end=400, value=0, step=0.5, title="Whole category min items (m)")
-cat_max = Slider(start=0.5, end=1100, value=1100, step=0.5, title="Whole category max items (m)")
+cat_max = Slider(start=0.5, end=1200, value=1200, step=0.5, title="Whole category max items (m)")
 recordset_min = Slider(start=0, end=2, value=0, step=.001, title="Recordset min items (m)")
-recordset_max = Slider(start=0.5, end=280, value=280, step=0.5, title="Recordset max items (m)")   #lifted to 280 for US marriages
+recordset_max = Slider(start=0.5, end=300, value=300, step=0.5, title="Recordset max items (m)")   #lifted to 280 for US marriages
 recordtype = CheckboxGroup(labels=['Records', 'Documents', 'Articles', 'Images'], active=[0, 1, 2, 3])
 hintable = RadioButtonGroup(labels=["Hintable", "Not hintable", "All"], active=2)
 hint_tip = Paragraph(text='Wedges extruded to outer circle (line) are hintable',
