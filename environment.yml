@@ -1,0 +1,11 @@
+name: data_vis_st
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - streamlit
+  - plotly
+  - pandas
+  - numpy
+  - pyarrow
